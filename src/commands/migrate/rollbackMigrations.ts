@@ -1,6 +1,5 @@
+import { DB, Logger } from "@atherjs/ather";
 import path from "path";
-import { DB } from "../../../database/Database";
-import { logInfo, logSuccess } from "../../../utils/Helpers";
 
 export async function rollbackMigrations() {
   try {
@@ -27,9 +26,9 @@ export async function rollbackMigrations() {
             .delete();
         }
       }
-      logSuccess(`Rolled back batch ${latestBatch}.`);
+      Logger.success(`Rolled back batch ${latestBatch}.`);
     } else {
-      logInfo("No migrations to rollback.");
+      Logger.info("No migrations to rollback.");
     }
   } catch (error) {
     console.error("Error rolling back migrations:", error);

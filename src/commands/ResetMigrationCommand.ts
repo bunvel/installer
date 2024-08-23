@@ -1,3 +1,4 @@
+import { Logger } from "@atherjs/ather";
 import { Command, CommanderCommand } from "../Command";
 import { resetMigrations } from "./migrate/resetMigrations";
 
@@ -10,7 +11,7 @@ export default class ResetMigrationCommand extends Command {
       await resetMigrations();
       process.exit(0);
     } catch (error) {
-      console.error("Error resetting migrations:", error);
+      Logger.error("Error resetting migrations:", error);
     }
   }
 

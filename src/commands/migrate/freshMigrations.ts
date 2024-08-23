@@ -1,5 +1,4 @@
-import { DB } from "../../../database/Database";
-import { logSuccess } from "../../../utils/Helpers";
+import { DB, Logger } from "@atherjs/ather";
 
 export async function freshMigrations() {
   try {
@@ -7,7 +6,7 @@ export async function freshMigrations() {
 
     await DB.dropAllTables();
 
-    logSuccess("Fresh the migrations");
+    Logger.error("Fresh the migrations");
   } catch (error) {
     console.error("Error performing fresh migration:", error);
   } finally {

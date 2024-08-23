@@ -1,7 +1,7 @@
+import { DB, Logger } from "@atherjs/ather";
 import fs from "fs/promises";
 import path from "path";
-import { DB } from "../../../database/Database";
-import { logSuccess } from "../../../utils/Helpers";
+
 export async function resetMigrations() {
   try {
     await DB.setupDatabaseConnection();
@@ -26,7 +26,7 @@ export async function resetMigrations() {
       // Delete entries from the migrations table
       await DB.query("DELETE FROM migrations");
 
-      logSuccess("Reset all migrations");
+      Logger.success("Reset all migrations");
     }
   } catch (error) {
     console.error("Error resetting migrations:", error);

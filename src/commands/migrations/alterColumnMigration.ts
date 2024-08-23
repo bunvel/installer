@@ -1,5 +1,5 @@
+import { Logger } from "@atherjs/ather";
 import { writeFile } from "fs/promises";
-import { logSuccess } from "../../../utils/Helpers";
 
 export async function alterColumnMigration(
   tableName: string,
@@ -43,6 +43,6 @@ export async function down() {
     `database/migrations/${migrationName}.ts`,
     migrationContent.trim()
   );
-  logSuccess(`Schema '${migrationName}' created successfully.`);
+  Logger.success(`Schema '${migrationName}' created successfully.`);
   process.exit(0);
 }

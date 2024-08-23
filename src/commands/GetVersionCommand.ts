@@ -8,7 +8,7 @@ import fetch from "node-fetch";
 import path from "path";
 import { Command } from "../Command";
 
-const packageName = "@atherjs/ather";
+const packageName = "@atherjs/cli";
 
 export default class VersionCommand extends Command {
   signature = "version";
@@ -45,7 +45,7 @@ export default class VersionCommand extends Command {
       } else {
         outro(
           chalk.yellow(
-            "⚠️ You chose not to upgrade. Run 'ather upgrade' later if you change your mind."
+            "⚠️  You chose not to upgrade. Run 'ather upgrade' later if you change your mind."
           )
         );
       }
@@ -131,12 +131,12 @@ export default class VersionCommand extends Command {
       try {
         s.start(`⬆️ Upgrading to version ${latestVersion}...`);
 
-        console.log(chalk.blue("🔄 Installing @atherjs/ather..."));
+        console.log(chalk.blue("🔄 Installing @atherjs/cli..."));
         const proc = spawn([
           "bun",
           "install",
           "-g",
-          `@atherjs/ather@${latestVersion}`,
+          `@atherjs/cli@${latestVersion}`,
         ]);
 
         const text = await new Response(proc.stdout).text();
@@ -147,7 +147,7 @@ export default class VersionCommand extends Command {
 
         console.log(
           chalk.green(
-            `🎉 @atherjs/ather has been successfully upgraded to version ${latestVersion}.`
+            `🎉 @atherjs/cli has been successfully upgraded to version ${latestVersion}.`
           )
         );
         return; // Exit if successful
@@ -173,7 +173,7 @@ export default class VersionCommand extends Command {
     if (attempt === maxRetries) {
       console.error(
         chalk.red(
-          "❌ Failed to upgrade @atherjs/ather after multiple attempts. Please close any open processes that might be using the files and try again."
+          "❌ Failed to upgrade @atherjs/cli after multiple attempts. Please close any open processes that might be using the files and try again."
         )
       );
     }

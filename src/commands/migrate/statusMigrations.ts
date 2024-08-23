@@ -1,10 +1,7 @@
+import { DatabaseException, DB, Logger } from "@atherjs/ather";
 import chalk from "chalk";
 import fs from "fs/promises";
-import { RowDataPacket } from "mysql2";
 import path from "path";
-import { DB } from "../../../database/Database";
-import { DatabaseException } from "../../../Exception";
-import { logError } from "../../../utils/Helpers";
 
 export async function statusMigrations(): Promise<void> {
   try {
@@ -67,7 +64,7 @@ export async function statusMigrations(): Promise<void> {
         );
         const batchNumber = isMigrated
           ? existingMigrations
-              .find((m: RowDataPacket) => m.migration === migrationFile)
+              .find((m: any) => m.migration === migrationFile)
               ?.batch.toString() || "N/A"
           : "N/A";
 
@@ -82,7 +79,7 @@ export async function statusMigrations(): Promise<void> {
       console.log(borderLine);
     }
   } catch (error) {
-    logError(`Error retrieving migration status: ${error}`);
+    Logger.error(`Error retrieving migration status: ${error}`);
   } finally {
     await DB.close();
   }

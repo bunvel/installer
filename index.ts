@@ -8,7 +8,7 @@ async function main() {
   const program = new Command();
 
   // Load built-in commands
-  const builtInCommandsPath = join(__dirname, "src", "console", "commands");
+  const builtInCommandsPath = join(__dirname, "src", "commands");
   const builtInCommands = await CommandLoader.load(builtInCommandsPath);
 
   // Load user-defined commands

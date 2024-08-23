@@ -1,5 +1,5 @@
+import { Logger } from "@atherjs/ather";
 import { writeFile } from "fs/promises";
-import { logSuccess } from "../../../utils/Helpers";
 
 export async function makeCreateTableMigration(tableName: string) {
   const timestamp = new Date()
@@ -39,5 +39,5 @@ export async function down() {
     `database/migrations/${migrationName}.ts`,
     migrationContent.trim()
   );
-  logSuccess(`Schema '${migrationName}' created successfully.`);
+  Logger.success(`Schema '${migrationName}' created successfully.`);
 }

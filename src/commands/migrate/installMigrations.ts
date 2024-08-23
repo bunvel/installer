@@ -1,6 +1,4 @@
-import { Blueprint } from "../../../database/Blueprint";
-import { DB } from "../../../database/Database";
-import { Schema } from "../../../database/Schema";
+import { Blueprint, DB, Schema } from "@atherjs/ather";
 
 export async function installMigrations() {
   await DB.setupDatabaseConnection();

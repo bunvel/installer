@@ -1,7 +1,7 @@
+import { DB, Logger } from "@atherjs/ather";
 import fs from "fs/promises";
 import path from "path";
-import { DB } from "../../../database/Database";
-import { logSuccess } from "../../../utils/Helpers";
+
 import { installMigrations } from "./installMigrations";
 
 export async function runMigrations() {
@@ -62,7 +62,7 @@ export async function runMigrations() {
       }
     }
 
-    logSuccess("All migrations completed successfully.");
+    Logger.success("All migrations completed successfully.");
   } catch (error) {
     console.error("Error running migrations:", error);
   } finally {

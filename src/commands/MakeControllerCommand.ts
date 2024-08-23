@@ -1,6 +1,6 @@
+import { Logger } from "@atherjs/ather";
 import { readFile, writeFile } from "fs/promises";
 import { join } from "path";
-import { logSuccess } from "../../utils/Helpers";
 import { Command, CommanderCommand } from "../Command";
 import MakeFormRequestCommand from "./MakeFormRequestCommand"; // Import the request command
 
@@ -27,7 +27,7 @@ export default class MakeControllerCommand extends Command {
       `${name}Controller.ts`
     );
     await writeFile(filePath, controllerContent);
-    logSuccess(`Controller '${name}' created successfully.`);
+    Logger.success(`Controller '${name}' created successfully.`);
 
     // Optionally create request class
     if (options?.request) {

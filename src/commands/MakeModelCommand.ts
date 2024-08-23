@@ -1,10 +1,9 @@
+import { Logger } from "@atherjs/ather";
 import { Command as CommanderCommand } from "commander";
 import { readFile, writeFile } from "fs/promises";
 import { join } from "path";
-import { ModelOptions } from "../../type";
-import { logSuccess } from "../../utils/Helpers";
-import { pluralize } from "../../utils/pluralize";
 import { Command } from "../Command";
+import { pluralize } from "../utils/pluralize";
 import MakeControllerCommand from "./MakeControllerCommand";
 import MakeFormRequestCommand from "./MakeFormRequestCommand";
 import { makeCreateTableMigration } from "./migrations/createTableMigration";
@@ -27,7 +26,7 @@ export default class MakeModelCommand extends Command {
 
     // Write the model file to the appropriate location
     await writeFile(`app/Models/${name}.ts`, modelContent.trim());
-    logSuccess(`Model '${name}' created successfully.`);
+    Logger.success(`Model '${name}' created successfully.`);
 
     // Optionally create migration
     if (options?.migration) {
@@ -54,4 +53,11 @@ export default class MakeModelCommand extends Command {
       .option("-r, --resource", "Generate a resource controller")
       .option("-R, --request", "Create a corresponding request class");
   }
+}
+
+export interface ModelOptions {
+  migration?: boolean;
+  controller?: boolean;
+  resource?: boolean;
+  request?: boolean;
 }

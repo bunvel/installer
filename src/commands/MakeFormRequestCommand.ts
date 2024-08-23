@@ -1,6 +1,6 @@
+import { Logger } from "@atherjs/ather";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import { join } from "path";
-import { logSuccess } from "../../utils/Helpers";
 import { Command, CommanderCommand } from "../Command";
 
 export default class MakeFormRequestCommand extends Command {
@@ -22,7 +22,7 @@ export default class MakeFormRequestCommand extends Command {
 
     // Write the form request class to the file
     await writeFile(filePath, formRequestContent.trim());
-    logSuccess(`Form request '${name}Request' created successfully.`);
+    Logger.success(`Form request '${name}Request' created successfully.`);
   }
 
   protected async ensureDirectory(dir: string): Promise<void> {
@@ -30,7 +30,7 @@ export default class MakeFormRequestCommand extends Command {
       await mkdir(dir, { recursive: true });
     } catch (error) {
       // Handle the error if directory creation fails
-      console.error(`Failed to create directory '${dir}':`, error);
+      Logger.error(`Failed to create directory '${dir}':`, error);
     }
   }
 

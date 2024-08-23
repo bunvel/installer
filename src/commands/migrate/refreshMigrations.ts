@@ -1,7 +1,7 @@
+import { DB, Logger } from "@atherjs/ather";
 import fs from "fs/promises";
 import path from "path";
-import { DB } from "../../../database/Database";
-import { logSuccess } from "../../../utils/Helpers";
+
 import { runMigrations } from "./runMigrations";
 
 export async function refreshMigrations() {
@@ -45,7 +45,7 @@ export async function refreshMigrations() {
     // Re-run all migrations
     await runMigrations();
 
-    logSuccess("Refreshed all migrations");
+    Logger.success("Refreshed all migrations");
   } catch (error) {
     console.error("Error performing fresh migration:", error);
   } finally {

@@ -1,3 +1,4 @@
+import { Logger } from "@atherjs/ather";
 import { Command, CommanderCommand } from "../Command";
 import { runMigrations } from "./migrate/runMigrations";
 
@@ -10,7 +11,7 @@ export default class RunMigrationsCommand extends Command {
       await runMigrations();
       process.exit(0);
     } catch (error) {
-      console.error("Error running migrations:", error);
+      Logger.error("Error running migrations:", error);
     }
   }
 

@@ -1,3 +1,4 @@
+import { Logger } from "@atherjs/ather";
 import { Command, CommanderCommand } from "../Command";
 import { installMigrations } from "./migrate/installMigrations";
 
@@ -10,7 +11,7 @@ export default class InstallMigrationsCommand extends Command {
       await installMigrations();
       process.exit(0);
     } catch (error) {
-      console.error("Error installing migrations table:", error);
+      Logger.error("Error installing migrations table:", error);
     }
   }
 
