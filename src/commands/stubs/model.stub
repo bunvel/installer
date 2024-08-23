@@ -1,0 +1,10 @@
+import { Model } from "@atherjs/ather";
+
+export class {{name}} extends Model {
+
+  public static tableName = "{{tableName}}";
+
+  constructor(data: any = {}) {
+    super(data);
+  }
+}
