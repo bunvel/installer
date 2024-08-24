@@ -30,10 +30,10 @@
     }
   },
   "devDependencies": {
-    "@types/bun": "^1.1.6",
+    "@types/bun": "^1.1.7",
     "@types/figlet": "^1.5.8",
-    "bumpp": "^9.4.2",
-    "bun-types": "^1.1.21",
+    "bumpp": "^9.5.2",
+    "bun-types": "^1.1.26",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4"
   },
