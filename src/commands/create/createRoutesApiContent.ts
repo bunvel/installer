@@ -10,7 +10,7 @@ export default function (router: Router) {
 
   router.group("/api", [], () => {
 
-    router.get("/welcome", async () => "Welcome to Ather");
+    router.get("", async () => "Welcome to Ather");
 
   });
 }

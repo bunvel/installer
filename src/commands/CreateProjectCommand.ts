@@ -1,6 +1,5 @@
-import { intro, outro, text } from "@clack/prompts";
+import { cancel, intro, isCancel, outro, select, text } from "@clack/prompts";
 import { exec } from "child_process";
-import { Command as CommanderCommand } from "commander";
 import { mkdir, writeFile } from "fs/promises";
 import { Command } from "../Command";
 import { installPackages } from "../utils/install";
@@ -20,80 +19,59 @@ export default class CreateProjectCommand extends Command {
 
   async handle(name?: string): Promise<void> {
     // Enhanced intro message
-    intro(`🚀 Welcome to the AtherJS Project Creator! 🎉
-    
-Get ready to kickstart your next big project with ease and efficiency. Let's create something amazing!\n\n`);
+    intro(`🚀 Welcome to the AtherJS Project Creator! 🎉`);
 
     let projectName = name;
-    // Prompt for project name if not provided
-    if (!projectName) {
+    while (!projectName) {
       const response = await text({
         placeholder: "project_name",
         message: "Enter the project name:",
       });
-      projectName = response.toString().trim();
+      projectName = this.formatProjectName(response.toString().trim());
+
+      if (!this.isValidProjectName(projectName)) {
+        console.error(
+          "🚫 Invalid project name. It must start with an alphabet and can only contain alphabets, numbers, and underscores."
+        );
+        projectName = "";
+      }
     }
 
-    // Convert project name to the desired format
-    projectName = this.formatProjectName(projectName);
-
-    if (!this.isValidProjectName(projectName)) {
-      console.error(
-        "🚫 Invalid project name. It must start with an alphabet and can only contain alphabets, numbers, and underscores."
-      );
-      return;
-    }
     console.log(`📛 Project Name: ${projectName}`);
 
-    // const projectType = await select({
-    //   message: "Pick a Project type.",
-    //   options: [
-    //     { value: "full", label: "Full", hint: "recommended" },
-    //     { value: "slim", label: "Slim" },
-    //   ],
-    // });
+    const projectType = await select({
+      message: "Pick a Project type.",
+      options: [
+        { value: "full", label: "Full", hint: "recommended" },
+        { value: "slim", label: "Slim" },
+      ],
+    });
 
-    // if (isCancel(projectType)) {
-    //   cancel("Operation cancelled.");
-    //   process.exit(0);
-    // }
+    if (isCancel(projectType)) {
+      cancel("Operation cancelled.");
+      process.exit(0);
+    }
 
-    // let db;
-    // let installDependencies;
-    // if (projectType == "full") {
-    //   db = await select({
-    //     message: "Pick a Database type.",
-    //     options: [
-    //       { value: "mysql", label: "MySQL", hint: "recommended" },
-    //       { value: "postgresql", label: "PostgreSQL" },
-    //       { value: "mariadb", label: "MariaDB" },
-    //       { value: "mssql", label: "MsSQL" },
-    //       { value: "sqlite3", label: "SQLite" },
-    //     ],
-    //   });
+    let db: string = "";
+    if (projectType == "full") {
+      db = (await select({
+        message: "Pick a Database type.",
+        options: [
+          { value: "mysql", label: "MySQL", hint: "recommended" },
+          { value: "postgresql", label: "PostgreSQL" },
+          { value: "sqlite", label: "SQLite" },
+        ],
+      })) as string;
+    }
 
-    //   installDependencies = true;
-    // }
-
-    // if (isCancel(db)) {
-    //   cancel("Operation cancelled.");
-    //   process.exit(0);
-    // }
-
-    let db;
-    let installDependencies = true;
     console.log(`🛠️ Creating project '${projectName}'...\n`);
 
-    console.log("📁 Creating directories...");
     await this.createDirectories(projectName);
 
-    console.log("📝 Creating files...");
-    await this.createFiles(projectName);
+    await this.createFiles(projectName, db);
 
-    if (installDependencies) {
-      console.log("📦 Installing dependencies...");
-      await this.installDependencies(projectName, db);
-    }
+    console.log("📦 Installing dependencies...");
+    await this.installDependencies(projectName);
 
     console.log("🔧 Initializing git repository...\n");
     await this.initializeGitRepository(projectName);
@@ -101,15 +79,13 @@ Get ready to kickstart your next big project with ease and efficiency. Let's cre
     // Enhanced outro message
     outro(`🎉 Project '${projectName}' created successfully! 🚀
 
-You're all set to dive into development. Here are the next steps:
-1. Navigate to your project directory: cd ${projectName}
-2. Start the development server: bun run dev
-3. Access your API at: [http://localhost:8000/api](http://localhost:8000/api)
-
-🚀 Happy coding! May your code be bug-free and your coffee be strong! ☕\n\n`);
+      You're all set to dive into development. Here are the next steps:
+      1. Navigate to your project directory: cd ${projectName}
+      2. Start the development server: bun run dev
+      3. Access your API at: [http://localhost:8000/api]
+      
+      🚀 Happy coding! May your code be bug-free and your coffee be strong! ☕\n\n`);
   }
-
-  protected configureCommand(command: CommanderCommand): void {}
 
   private isValidProjectName(name: string): boolean {
     // Regex to validate project name
@@ -136,20 +112,19 @@ You're all set to dive into development. Here are the next steps:
       "routes",
       "config",
     ];
-    for (const dir of directories) {
-      await mkdir(`${name}/${dir}`, { recursive: true });
-      process.stdout.write(".");
-    }
-    console.log(" Done!\n");
+    await Promise.all(
+      directories.map((dir) => mkdir(`${name}/${dir}`, { recursive: true }))
+    );
+    console.log("📁 Directories created successfully!\n");
   }
 
-  private async createFiles(name: string) {
+  private async createFiles(name: string, db: string) {
     const files = [
       { path: ".gitignore", content: createGitIgnore() },
       { path: "README.md", content: createReadme() },
       { path: "package.json", content: createPackageJson(name) },
       { path: "index.ts", content: createIndexContent() },
-      { path: ".env", content: createEnv(name) },
+      { path: ".env", content: createEnv(name, db) },
       { path: ".env.example", content: createExampleEnv() },
       { path: "config/app.ts", content: createAppConfig() },
       { path: "config/database.ts", content: createDatabaseConfig() },
@@ -160,31 +135,16 @@ You're all set to dive into development. Here are the next steps:
       },
     ];
 
-    for (const file of files) {
-      await writeFile(`${name}/${file.path}`, file.content.trim());
-      process.stdout.write(".");
-    }
-    console.log(" Done!\n");
+    await Promise.all(
+      files.map((file) =>
+        writeFile(`${name}/${file.path}`, file.content.trim())
+      )
+    );
+    console.log("📝 Files created successfully!\n");
   }
 
-  private async installDependencies(name: string, db: any) {
-    const dbDependencies = {
-      mysql: "mysql2",
-      postgresql: "pg",
-      mariadb: "mariadb",
-      mssql: "mssql",
-      sqlite3: "sqlite3",
-    };
-    if (db) {
-      const dbKey = db as keyof typeof dbDependencies;
-      await installPackages(name, [dbDependencies[dbKey]]);
-    }
-
-    await installPackages(
-      name,
-      ["typescript", "@types/node", "bun-types"],
-      true
-    );
+  private async installDependencies(name: string) {
+    await installPackages(name, ["typescript", "bun-types"], true);
     await installPackages(name, ["@atherjs/ather"]);
   }
 

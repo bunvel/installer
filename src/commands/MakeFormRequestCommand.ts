@@ -1,7 +1,7 @@
 import { Logger } from "@atherjs/ather";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import { join } from "path";
-import { Command, CommanderCommand } from "../Command";
+import { Command } from "../Command";
 
 export default class MakeFormRequestCommand extends Command {
   signature = "make:request <name>";
@@ -32,9 +32,5 @@ export default class MakeFormRequestCommand extends Command {
       // Handle the error if directory creation fails
       Logger.error(`Failed to create directory '${dir}':`, error);
     }
-  }
-
-  protected configureCommand(command: CommanderCommand): void {
-    // Add any options or arguments if needed
   }
 }

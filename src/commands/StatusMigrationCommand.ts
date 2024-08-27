@@ -1,4 +1,4 @@
-import { Command, CommanderCommand } from "../Command";
+import { Command } from "../Command";
 import { statusMigrations } from "./migrate/statusMigrations";
 
 export default class StatusMigrationCommand extends Command {
@@ -8,9 +8,5 @@ export default class StatusMigrationCommand extends Command {
   async handle(): Promise<void> {
     await statusMigrations();
     process.exit(0);
-  }
-
-  protected configureCommand(command: CommanderCommand): void {
-    // No additional options required for this command
   }
 }

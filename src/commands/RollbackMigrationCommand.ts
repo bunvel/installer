@@ -1,5 +1,5 @@
 import { Logger } from "@atherjs/ather";
-import { Command, CommanderCommand } from "../Command";
+import { Command } from "../Command";
 import { rollbackMigrations } from "./migrate/rollbackMigrations";
 
 export default class RollbackMigrationsCommand extends Command {
@@ -13,9 +13,5 @@ export default class RollbackMigrationsCommand extends Command {
     } catch (error) {
       Logger.error("Error rolling back migrations:", error);
     }
-  }
-
-  protected configureCommand(command: CommanderCommand): void {
-    // No additional options required for this command
   }
 }

@@ -1,5 +1,5 @@
 import { Logger } from "@atherjs/ather";
-import { Command, CommanderCommand } from "../Command";
+import { Command } from "../Command";
 import { resetMigrations } from "./migrate/resetMigrations";
 
 export default class ResetMigrationCommand extends Command {
@@ -13,9 +13,5 @@ export default class ResetMigrationCommand extends Command {
     } catch (error) {
       Logger.error("Error resetting migrations:", error);
     }
-  }
-
-  protected configureCommand(command: CommanderCommand): void {
-    // No additional options required for this command
   }
 }

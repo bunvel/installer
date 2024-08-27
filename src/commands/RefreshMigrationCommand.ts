@@ -1,5 +1,5 @@
 import { Logger } from "@atherjs/ather";
-import { Command, CommanderCommand } from "../Command";
+import { Command } from "../Command";
 import { refreshMigrations } from "./migrate/refreshMigrations";
 
 export default class RefreshMigrationCommand extends Command {
@@ -13,9 +13,5 @@ export default class RefreshMigrationCommand extends Command {
     } catch (error) {
       Logger.error("Error refreshing migrations:", error);
     }
-  }
-
-  protected configureCommand(command: CommanderCommand): void {
-    // No additional options required for this command
   }
 }
