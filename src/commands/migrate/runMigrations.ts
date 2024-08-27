@@ -51,6 +51,7 @@ export async function runMigrations() {
 
       // Check if the migration has already been run
       if (!runMigrations.has(migrationFile)) {
+        console.log(`Running migration: ${migrationFile}`);
         await migration.up();
         await DB.table("migrations").insert([
           {
@@ -58,7 +59,6 @@ export async function runMigrations() {
             batch: nextBatch,
           },
         ]);
-        console.log(`Completed migration: ${migrationFile}`);
       }
     }
 
