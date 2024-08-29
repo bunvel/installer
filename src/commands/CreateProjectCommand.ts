@@ -9,6 +9,7 @@ import { createDatabaseConfig } from "./create/createDatabaseConfig";
 import { createEnv, createExampleEnv } from "./create/createEnv";
 import { createGitIgnore } from "./create/createGitignore";
 import { createIndexContent } from "./create/createIndexContent";
+import { createLogConfig } from "./create/createLoggingConfig";
 import { createPackageJson } from "./create/createPackageJson";
 import { createReadme } from "./create/createReadme";
 import { createRoutesApiContent } from "./create/createRoutesApiContent";
@@ -128,6 +129,7 @@ export default class CreateProjectCommand extends Command {
       { path: ".env.example", content: createExampleEnv() },
       { path: "config/app.ts", content: createAppConfig() },
       { path: "config/database.ts", content: createDatabaseConfig() },
+      { path: "config/logging.ts", content: createLogConfig() },
       { path: "routes/api.ts", content: createRoutesApiContent() },
       {
         path: "app/Controllers/Controller.ts",

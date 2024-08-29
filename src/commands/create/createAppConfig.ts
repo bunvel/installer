@@ -49,15 +49,6 @@ export default {
   url: Env.get("APP_URL", "http://localhost"),
 
   /**
-   * The log level for the application.
-   * This is fetched from the environment variable 'LOG_LEVEL'.
-   * If 'LOG_LEVEL' is not set, it defaults to 'debug'.
-   * 
-   * @var {string}
-   */
-  logLevel: Env.get("LOG_LEVEL", "debug"),
-
-  /**
    * The timezone for the application.
    * This is fetched from the environment variable 'APP_TIMEZONE'.
    * If 'APP_TIMEZONE' is not set, it defaults to 'UTC'.
