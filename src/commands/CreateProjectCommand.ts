@@ -65,6 +65,8 @@ export default class CreateProjectCommand extends Command {
           { value: "sqlite", label: "SQLite" },
         ],
       })) as string;
+    }else{
+      db = "sqlite";
     }
 
     console.log(`🛠️ Creating project '${projectName}'...\n`);
