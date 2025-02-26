@@ -1,6 +1,6 @@
 export function createLogConfig() {
   return `
-import { Env } from "@atherjs/ather";
+import { Env } from "@bunvel/framework";
 
 export default {
   /**
@@ -10,7 +10,7 @@ export default {
    *
    * @var {string}
    */
-  default: Env.get("LOG_CHANNEL", "stack"),
+  default: Env.get("LOG_CHANNEL", "stderr"),
 
   /**
    * The logging channels configuration.
@@ -33,7 +33,7 @@ export default {
      */
     single: {
       driver: "single",
-      path: Env.get("LOG_SINGLE_PATH", "logs/ather.log"),
+      path: Env.get("LOG_SINGLE_PATH", "logs/bunvel.log"),
       level: Env.get("LOG_LEVEL", "debug"),
     },
 
@@ -42,7 +42,7 @@ export default {
      */
     daily: {
       driver: "daily",
-      path: Env.get("LOG_DAILY_PATH", "logs/ather.log"),
+      path: Env.get("LOG_DAILY_PATH", "logs/bunvel.log"),
       level: Env.get("LOG_LEVEL", "debug"),
       days: Env.get("LOG_DAILY_DAYS", 14),
     },

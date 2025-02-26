@@ -1,6 +1,6 @@
 export function createDatabaseConfig() {
   return `
-import { Env } from "@atherjs/ather";
+import { Env } from "@bunvel/framework";
 
 export default {
   /**

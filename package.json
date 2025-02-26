@@ -1,23 +1,23 @@
 {
-  "name": "@atherjs/cli",
-  "version": "0.1.0",
+  "name": "@bunvel/installer",
+  "version": "1.0.0",
   "type": "module",
   "description": "Cli tool to create a Ather project",
   "keywords": [
-    "Atherjs",
-    "Atherjs CLI"
+    "Bunvel",
+    "Bunvel Installer"
   ],
   "author": "Aniket Khote",
   "license": "MIT",
   "bin": {
-    "ather": "index.ts"
+    "bunvel": "index.ts"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup index.ts --format esm,cjs --dts",
-    "release": "bumpp --commit --push --tag && npm publish --access public"
+    "release": "bumpp --commit --push --tag && bun publish --access public"
   },
   "files": [
     "src"
@@ -30,20 +30,18 @@
     }
   },
   "devDependencies": {
-    "@types/bun": "^1.1.8",
-    "@types/figlet": "^1.5.8",
-    "bumpp": "^9.5.2",
-    "bun-types": "^1.1.26",
-    "tsup": "^8.2.4",
-    "typescript": "^5.5.4"
+    "@types/bun": "^1.2.3",
+    "@types/figlet": "^1.7.0",
+    "bumpp": "^9.11.1",
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.3"
   },
   "dependencies": {
-    "@atherjs/cli": "file:",
     "@clack/prompts": "^0.7.0",
-    "@inquirer/prompts": "^5.3.8",
-    "chalk": "^5.3.0",
+    "@inquirer/prompts": "^5.5.0",
+    "chalk": "^5.4.1",
     "commander": "^12.1.0",
-    "figlet": "^1.7.0",
+    "figlet": "^1.8.0",
     "node-fetch": "^3.3.2"
   }
 }

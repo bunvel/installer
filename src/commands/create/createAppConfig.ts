@@ -1,6 +1,6 @@
 export function createAppConfig() {
   return `
-import { Env } from "@atherjs/ather";
+import { Env } from "@bunvel/framework";
   
 export default {
   /**
@@ -24,11 +24,11 @@ export default {
   /**
    * The environment in which the application is running.
    * This is fetched from the environment variable 'APP_ENV'.
-   * If 'APP_ENV' is not set, it defaults to 'development'.
+   * If 'APP_ENV' is not set, it defaults to 'local'.
    * 
    * @var {string}
    */
-  env: Env.get("APP_ENV", "development"),
+  env: Env.get("APP_ENV", "local"),
 
   /**
    * The debug mode for the application.

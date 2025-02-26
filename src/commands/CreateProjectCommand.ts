@@ -4,9 +4,11 @@ import { mkdir, writeFile } from "fs/promises";
 import { Command } from "../Command";
 import { installPackages } from "../utils/install";
 import { createAppConfig } from "./create/createAppConfig";
+import { createCli } from "./create/createCli";
 import { createControllerContent } from "./create/createControllerContent";
 import { createDatabaseConfig } from "./create/createDatabaseConfig";
 import { createEnv, createExampleEnv } from "./create/createEnv";
+import { createExampleTest } from "./create/createExampleTest";
 import { createGitIgnore } from "./create/createGitignore";
 import { createIndexContent } from "./create/createIndexContent";
 import { createLogConfig } from "./create/createLoggingConfig";
@@ -20,7 +22,7 @@ export default class CreateProjectCommand extends Command {
 
   async handle(name?: string): Promise<void> {
     // Enhanced intro message
-    intro(`🚀 Welcome to the AtherJS Project Creator! 🎉`);
+    intro(`🚀 Welcome to the Bunvel Project Creator! 🎉`);
 
     let projectName = name;
     while (!projectName) {
@@ -72,7 +74,7 @@ export default class CreateProjectCommand extends Command {
     await this.createFiles(projectName, db);
 
     console.log("📦 Installing dependencies...");
-    await this.installDependencies(projectName);
+    await this.installDependencies(projectName, db);
 
     console.log("🔧 Initializing git repository...\n");
     await this.initializeGitRepository(projectName);
@@ -105,13 +107,14 @@ export default class CreateProjectCommand extends Command {
   private async createDirectories(name: string) {
     const directories = [
       "",
-      "app/Controllers",
-      "app/Models",
+      "app/controllers",
+      "app/models",
       "database/migrations",
       "database/seeders",
       "database/factories",
       "routes",
       "config",
+      "test",
     ];
     await Promise.all(
       directories.map((dir) => mkdir(`${name}/${dir}`, { recursive: true }))
@@ -126,13 +129,15 @@ export default class CreateProjectCommand extends Command {
       { path: "package.json", content: createPackageJson(name) },
       { path: "index.ts", content: createIndexContent() },
       { path: ".env", content: createEnv(name, db) },
+      { path: "vel.ts", content: createCli() },
       { path: ".env.example", content: createExampleEnv() },
+      { path: "test/example.test.ts", content: createExampleTest() },
       { path: "config/app.ts", content: createAppConfig() },
       { path: "config/database.ts", content: createDatabaseConfig() },
       { path: "config/logging.ts", content: createLogConfig() },
       { path: "routes/api.ts", content: createRoutesApiContent() },
       {
-        path: "app/Controllers/Controller.ts",
+        path: "app/controllers/Controller.ts",
         content: createControllerContent(),
       },
     ];
@@ -145,9 +150,17 @@ export default class CreateProjectCommand extends Command {
     console.log("📝 Files created successfully!\n");
   }
 
-  private async installDependencies(name: string) {
-    await installPackages(name, ["typescript", "bun-types"], true);
-    await installPackages(name, ["@atherjs/ather"]);
+  private async installDependencies(name: string, db: string) {
+    await installPackages(name, ["typescript", "@types/bun"], true);
+    await installPackages(name, ["@bunvel/framework"]);
+
+    if (db == "mysql") {
+      await installPackages(name, ["mysql2"]);
+    }
+
+    if (db == "postgresql") {
+      await installPackages(name, ["pg"]);
+    }
   }
 
   private async initializeGitRepository(projectName: string) {

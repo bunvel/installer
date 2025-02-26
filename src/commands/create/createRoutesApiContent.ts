@@ -1,19 +1,15 @@
 export function createRoutesApiContent() {
   return `
-import { Router } from "@atherjs/ather";
+import { Router, RouterService } from "@bunvel/framework";
 
 /**
  * Define API routes for the application.
  *
  */
-export default function (router: Router) {
+export default (appRouter: Router) => {
+  const router = new RouterService(appRouter);
 
-  router.group("/api", [], () => {
-
-    router.get("/", async () => "Welcome to Ather");
-
-  });
-}
-
+  router.get("/", async () => "Welcome to Bunvel");
+};
   `;
 }

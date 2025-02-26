@@ -1,5 +1,0 @@
-import { Controller } from "./controller";
-
-export class {{name}}Controller extends Controller {
-  // Define your methods here
-}

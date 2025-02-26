@@ -3,12 +3,13 @@ export function createPackageJson(name: string) {
     {
       name,
       version: "1.0.0",
-      description: "Your Cutting-Edge Backend Framework",
+      description: "Your Cutting-Edge Framework",
       module: "index.ts",
       type: "module",
       scripts: {
         start: "bun run index.ts",
         dev: "bun run --watch index.ts",
+        vel: "bun run ./vel.ts",
       },
     },
     null,
