@@ -1,24 +1,30 @@
 #!/usr/bin/env bun
 
 import { Command } from "commander";
-import { join } from "path";
-import { CommandLoader } from "./src/CommandLoader";
+import CreateProjectCommand from "./src/commands/CreateProjectCommand";
+import UpgradeCommand from "./src/commands/UpgradeVersionCommand";
 
 async function main() {
   const program = new Command();
+  const createProjectCommand = new CreateProjectCommand();
+  const upgradeCommand = new UpgradeCommand();
 
-  // Load built-in commands
-  const builtInCommandsPath = join(__dirname, "src", "commands");
-  const builtInCommands = await CommandLoader.load(builtInCommandsPath);
+  // Command 1: Create Project
+  program
+    .command("create")
+    .description("Create a new Ather project")
+    .option("-n, --name <name>", "Project name")
+    .action((options) => {
+      createProjectCommand.handle(options.name);
+    });
 
-  // Load user-defined commands
-  // const userCommandsPath = join(process.cwd(), "commands");
-  // const userCommands = await CommandLoader.load(userCommandsPath);
-
-  // Configure all commands
-  [...builtInCommands].forEach((command) => {
-    command.configure(program);
-  });
+  // Command 2: Generate Config
+  program
+    .command("config")
+    .description("Generate configuration file")
+    .action(() => {
+      upgradeCommand.handle();
+    });
 
   program.parse(process.argv);
 
