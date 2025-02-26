@@ -1,6 +1,6 @@
 {
   "name": "@bunvel/installer",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "description": "Cli tool to create a Ather project",
   "keywords": [
@@ -17,7 +17,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup index.ts --format esm,cjs --dts",
-    "release": "bumpp --commit --push --tag && bun publish --access public"
+    "release": "bun run build && bumpp --commit --push --tag && bun publish --access public"
   },
   "files": [
     "dist"
