@@ -45,7 +45,7 @@ async function main() {
     chalk.gray(`
 Examples:
   ${chalk.green("bunvel create my-app")}    Create a new project
-  ${chalk.green("bunvel upgrade")}         Upgrade to the latest version
+  ${chalk.green("bunvel upgrade")}          Upgrade to the latest version
 
 Docs: https://bunvel.dev
 `)

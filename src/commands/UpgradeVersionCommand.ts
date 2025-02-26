@@ -11,7 +11,7 @@ export default class UpgradeCommand extends Command {
       await this.checkBunInstalled();
 
       console.log("🚀 Upgrading @bunvel/installer to the latest version...");
-      await this.runCommand("bun add @bunvel/installer@latest");
+      await this.runCommand("bun update --latest @bunvel/installer");
 
       console.log("✅ Bunvel upgraded successfully!");
     } catch (error) {

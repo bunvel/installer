@@ -3,7 +3,7 @@ export function createPackageJson(name: string) {
     {
       name,
       version: "1.0.0",
-      description: "Your Cutting-Edge Framework",
+      description: "Fast. Minimal. Bun-powered framework.",
       module: "index.ts",
       type: "module",
       scripts: {
@@ -11,6 +11,10 @@ export function createPackageJson(name: string) {
         dev: "bun run --watch index.ts",
         vel: "bun run ./vel.ts",
       },
+      engines: {
+        bun: ">=1.2.0",
+      },
+      packageManager: "bun@latest",
     },
     null,
     2
