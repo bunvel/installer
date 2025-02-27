@@ -35,9 +35,6 @@ APP_PORT = 8000
 APP_ENV = local
 APP_URL = http://localhost
 
-APP_DEBUG = true
-LOG_CHANNEL = stderr
-
 ${dbConfig}
   `;
 }
@@ -49,14 +46,8 @@ APP_PORT = 8000
 APP_ENV = local
 APP_URL = http://localhost
 
-APP_DEBUG = true
-LOG_CHANNEL = stderr
-
-DB_CONNECTION = mysql
-DB_HOST = 127.0.0.1
-DB_PORT = 3306
-DB_DATABASE = "bunvel"
-DB_USERNAME = "root"
-DB_PASSWORD = "root"
+DB_CONNECTION = sqlite
+DB_DATABASE = "bunvel.sqlite"
+DB_MODE = "readwrite"
   `;
 }

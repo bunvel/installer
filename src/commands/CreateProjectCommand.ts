@@ -15,6 +15,7 @@ import { createLogConfig } from "./create/createLoggingConfig";
 import { createPackageJson } from "./create/createPackageJson";
 import { createReadme } from "./create/createReadme";
 import { createRoutesApiContent } from "./create/createRoutesApiContent";
+import { createTsconfig } from "./create/tsconfig";
 
 export default class CreateProjectCommand extends Command {
   signature = "create [name]"; // Make 'name' optional
@@ -42,50 +43,40 @@ export default class CreateProjectCommand extends Command {
 
     console.log(`📛 Project Name: ${projectName}`);
 
-    const projectType = await select({
-      message: "Pick a Project type.",
+    const db = (await select({
+      message: "Pick a Database type.",
       options: [
-        { value: "full", label: "Full", hint: "recommended" },
-        { value: "slim", label: "Slim" },
+        { value: "mysql", label: "MySQL", hint: "recommended" },
+        { value: "postgresql", label: "PostgreSQL" },
+        { value: "sqlite", label: "SQLite" },
       ],
-    });
+    })) as string;
 
-    if (isCancel(projectType)) {
+    if (isCancel(db)) {
       cancel("Operation cancelled.");
       process.exit(0);
     }
 
-    let db: string = "";
-    if (projectType == "full") {
-      db = (await select({
-        message: "Pick a Database type.",
-        options: [
-          { value: "mysql", label: "MySQL", hint: "recommended" },
-          { value: "postgresql", label: "PostgreSQL" },
-          { value: "sqlite", label: "SQLite" },
-        ],
-      })) as string;
-    }else{
-      db = "sqlite";
-    }
+    const { parentDir, projectDir } = this.extractProjectPath(projectName);
 
-    console.log(`🛠️ Creating project '${projectName}'...\n`);
+    console.log(`🛠️ Creating project '${projectDir}'...
+`);
 
-    await this.createDirectories(projectName);
+    await this.createDirectories(parentDir, projectDir);
 
-    await this.createFiles(projectName, db);
+    await this.createFiles(`${parentDir}/${projectDir}`, projectDir, db);
 
     console.log("📦 Installing dependencies...");
-    await this.installDependencies(projectName, db);
+    await this.installDependencies(`${parentDir}/${projectDir}`, db);
 
     console.log("🔧 Initializing git repository...\n");
-    await this.initializeGitRepository(projectName);
+    await this.initializeGitRepository(`${parentDir}/${projectDir}`);
 
     // Enhanced outro message
-    outro(`🎉 Project '${projectName}' created successfully! 🚀
+    outro(`🎉 Project '${projectDir}' created successfully! 🚀
 
       You're all set to dive into development. Here are the next steps:
-      1. Navigate to your project directory: cd ${projectName}
+      1. Navigate to your project directory: cd ${parentDir}/${projectDir}
       2. Start the development server: bun run dev
       3. Access your API at: [http://localhost:8000/api]
       
@@ -106,31 +97,38 @@ export default class CreateProjectCommand extends Command {
       .toLowerCase(); // Convert to lowercase
   }
 
-  private async createDirectories(name: string) {
+  private extractProjectPath(name: string) {
+    const parts = name.split("/");
+    const projectDir = parts.pop() as string;
+    const parentDir = parts.join("/") || ".";
+    return { parentDir, projectDir };
+  }
+
+  private async createDirectories(parentDir: string, projectDir: string) {
+    const basePath = `${parentDir}/${projectDir}`;
     const directories = [
       "",
       "app/controllers",
       "app/models",
       "database/migrations",
-      "database/seeders",
-      "database/factories",
       "routes",
       "config",
       "test",
     ];
     await Promise.all(
-      directories.map((dir) => mkdir(`${name}/${dir}`, { recursive: true }))
+      directories.map((dir) => mkdir(`${basePath}/${dir}`, { recursive: true }))
     );
     console.log("📁 Directories created successfully!\n");
   }
 
-  private async createFiles(name: string, db: string) {
+  private async createFiles(basePath: string, projectDir: string, db: string) {
     const files = [
       { path: ".gitignore", content: createGitIgnore() },
+      { path: "tsconfig.json", content: createTsconfig() },
       { path: "README.md", content: createReadme() },
-      { path: "package.json", content: createPackageJson(name) },
+      { path: "package.json", content: createPackageJson(projectDir) },
       { path: "index.ts", content: createIndexContent() },
-      { path: ".env", content: createEnv(name, db) },
+      { path: ".env", content: createEnv(projectDir, db) },
       { path: "vel.ts", content: createCli() },
       { path: ".env.example", content: createExampleEnv() },
       { path: "test/example.test.ts", content: createExampleTest() },
@@ -139,35 +137,35 @@ export default class CreateProjectCommand extends Command {
       { path: "config/logging.ts", content: createLogConfig() },
       { path: "routes/api.ts", content: createRoutesApiContent() },
       {
-        path: "app/controllers/Controller.ts",
+        path: "app/controllers/controller.ts",
         content: createControllerContent(),
       },
     ];
 
     await Promise.all(
       files.map((file) =>
-        writeFile(`${name}/${file.path}`, file.content.trim())
+        writeFile(`${basePath}/${file.path}`, file.content.trim())
       )
     );
     console.log("📝 Files created successfully!\n");
   }
 
-  private async installDependencies(name: string, db: string) {
-    await installPackages(name, ["typescript", "@types/bun"], true);
-    await installPackages(name, ["@bunvel/framework"]);
+  private async installDependencies(basePath: string, db: string) {
+    await installPackages(basePath, ["typescript", "@types/bun"], true);
+    await installPackages(basePath, ["@bunvel/framework"]);
 
     if (db == "mysql") {
-      await installPackages(name, ["mysql2"]);
+      await installPackages(basePath, ["mysql2"]);
     }
 
     if (db == "postgresql") {
-      await installPackages(name, ["pg"]);
+      await installPackages(basePath, ["pg"]);
     }
   }
 
-  private async initializeGitRepository(projectName: string) {
+  private async initializeGitRepository(basePath: string) {
     return new Promise<void>((resolve, reject) => {
-      exec(`git init ${projectName}`, (error, stdout, stderr) => {
+      exec(`git init ${basePath}`, (error, stdout, stderr) => {
         if (error) {
           console.error(`❌ Failed to initialize git repository: ${stderr}`);
           reject(error);

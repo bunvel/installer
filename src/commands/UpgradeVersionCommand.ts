@@ -1,5 +1,8 @@
 import { exec } from "child_process";
+import { promisify } from "util";
 import { Command } from "../Command";
+
+const execPromise = promisify(exec);
 
 export default class UpgradeCommand extends Command {
   signature = "upgrade";
@@ -7,43 +10,72 @@ export default class UpgradeCommand extends Command {
 
   async handle(): Promise<void> {
     try {
-      // Check if 'bun' is installed
       await this.checkBunInstalled();
 
-      console.log("🚀 Upgrading @bunvel/installer to the latest version...");
-      await this.runCommand("bun update --latest @bunvel/installer");
+      console.log("🚀 Checking for updates to @bunvel/installer...");
 
-      console.log("✅ Bunvel upgraded successfully!");
+      const currentVersion = await this.getInstalledVersion(
+        "@bunvel/installer"
+      );
+      const latestVersion = await this.getLatestVersion("@bunvel/installer");
+
+      if (currentVersion === latestVersion) {
+        console.log(
+          `✅ You already have the latest version: ${currentVersion}`
+        );
+        process.exit(0);
+      }
+
+      console.log(
+        `⬆️  Upgrading from ${currentVersion} to ${latestVersion}...`
+      );
+      await this.runCommand("bun update --latest @bunvel/installer");
+      console.log(
+        `✅ Successfully upgraded to @bunvel/installer v${latestVersion}`
+      );
     } catch (error) {
       console.error("❌ Error during upgrade:", error);
       process.exit(1);
     }
-
-    process.exit(0);
   }
 
   private async checkBunInstalled(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      exec("bun --version", (error) => {
-        if (error) {
-          reject("Bun is not installed. Please install it from https://bun.sh");
-        } else {
-          resolve();
-        }
-      });
-    });
+    try {
+      await execPromise("bun --version");
+    } catch {
+      throw new Error(
+        "Bun is not installed. Please install it from https://bun.sh"
+      );
+    }
+  }
+
+  private async getInstalledVersion(pkg: string): Promise<string> {
+    try {
+      const { stdout } = await execPromise(`bun pm ls ${pkg} --json`);
+      const result = JSON.parse(stdout);
+      return result?.dependencies?.[pkg]?.version || "unknown";
+    } catch {
+      throw new Error(`Failed to fetch installed version of ${pkg}`);
+    }
+  }
+
+  private async getLatestVersion(pkg: string): Promise<string> {
+    try {
+      const { stdout } = await execPromise(`bun pm info ${pkg} --json`);
+      const result = JSON.parse(stdout);
+      return result.version || "unknown";
+    } catch {
+      throw new Error(`Failed to fetch latest version of ${pkg}`);
+    }
   }
 
   private async runCommand(command: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      exec(command, (error, stdout, stderr) => {
-        if (error) {
-          reject(stderr || error.message);
-        } else {
-          console.log(stdout);
-          resolve();
-        }
-      });
-    });
+    try {
+      const { stdout, stderr } = await execPromise(command);
+      if (stdout) console.log(stdout);
+      if (stderr) console.error(stderr);
+    } catch (error) {
+      throw new Error(`Command failed: ${command}`);
+    }
   }
 }
