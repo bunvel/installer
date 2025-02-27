@@ -1,8 +1,8 @@
 {
   "name": "@bunvel/installer",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "type": "module",
-  "description": "Cli tool to create a Ather project",
+  "description": "Cli tool to create a bunvel project",
   "keywords": [
     "Bunvel",
     "Bunvel Installer"
