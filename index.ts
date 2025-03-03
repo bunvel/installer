@@ -5,11 +5,13 @@ import { Command } from "commander";
 import figlet from "figlet";
 import CreateProjectCommand from "./src/commands/CreateProjectCommand";
 import UpgradeCommand from "./src/commands/UpgradeVersionCommand";
+import { VersionCommand } from "./src/commands/VersionCommand";
 
 async function main() {
   const program = new Command();
   const createProjectCommand = new CreateProjectCommand();
   const upgradeCommand = new UpgradeCommand();
+  const versionCommand = new VersionCommand();
 
   // 🌟 Display Welcome Banner
   console.log(
@@ -39,6 +41,14 @@ async function main() {
       upgradeCommand.handle();
     });
 
+  // 📌 Command: Version
+  program
+    .command("version")
+    .description("📌 Display the current Bunvel version")
+    .action(() => {
+      versionCommand.handle();
+    });
+
   // 📖 Global Help
   program.addHelpText(
     "after",
@@ -46,8 +56,8 @@ async function main() {
 Examples:
   ${chalk.green("bunvel create my-app")}    Create a new project
   ${chalk.green("bunvel upgrade")}          Upgrade to the latest version
+  ${chalk.green("bunvel version")}          Display the current version
 
-Docs: https://bunvel.dev
 `)
   );
 

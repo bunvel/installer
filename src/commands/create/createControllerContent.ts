@@ -1,5 +1,5 @@
 export function createControllerContent() {
   return `
-export class Controller {}
+export default abstract class Controller {}
   `;
 }

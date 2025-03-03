@@ -10,6 +10,8 @@ export default (appRouter: Router) => {
   const router = new RouterService(appRouter);
 
   router.get("/", async () => "Welcome to Bunvel");
+
+  router.get("/api", async () => "Hello, API!");
 };
   `;
 }

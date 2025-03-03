@@ -29,12 +29,10 @@ export function createTsconfig() {
     "baseUrl": "./app",
     "paths": {
       "@controller/*": ["controllers/*"],
-      "@middleware/*": ["middleware/*"],
-      "@model/*": ["model/*"],
-      "@provider/*": ["provider/*"],
-      "@type/*": ["type/*"],
-      "@interface/*": ["interface/*"],
-      "@command/*": ["command/*"]
+      "@middleware/*": ["middlewares/*"],
+      "@model/*": ["models/*"],
+      "@provider/*": ["providers/*"],
+      "@command/*": ["commands/*"]
     },
   }
 }

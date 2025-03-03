@@ -1,8 +1,8 @@
 import { cancel, intro, isCancel, outro, select, text } from "@clack/prompts";
-import { exec } from "child_process";
 import { mkdir, writeFile } from "fs/promises";
 import { Command } from "../Command";
-import { installPackages } from "../utils/install";
+import { installDependencies } from "../utils/install-deps";
+import { initializeGitRepository } from "../utils/intialize-git";
 import { createAppConfig } from "./create/createAppConfig";
 import { createCli } from "./create/createCli";
 import { createControllerContent } from "./create/createControllerContent";
@@ -15,6 +15,9 @@ import { createLogConfig } from "./create/createLoggingConfig";
 import { createPackageJson } from "./create/createPackageJson";
 import { createReadme } from "./create/createReadme";
 import { createRoutesApiContent } from "./create/createRoutesApiContent";
+import createUserController from "./create/createUserController";
+import createUserMigration from "./create/createUserMigration";
+import createUserModel from "./create/createUserModel";
 import { createTsconfig } from "./create/tsconfig";
 
 export default class CreateProjectCommand extends Command {
@@ -67,10 +70,10 @@ export default class CreateProjectCommand extends Command {
     await this.createFiles(`${parentDir}/${projectDir}`, projectDir, db);
 
     console.log("📦 Installing dependencies...");
-    await this.installDependencies(`${parentDir}/${projectDir}`, db);
+    await installDependencies(`${parentDir}/${projectDir}`, db);
 
     console.log("🔧 Initializing git repository...\n");
-    await this.initializeGitRepository(`${parentDir}/${projectDir}`);
+    await initializeGitRepository(`${parentDir}/${projectDir}`);
 
     // Enhanced outro message
     outro(`🎉 Project '${projectDir}' created successfully! 🚀
@@ -140,6 +143,18 @@ export default class CreateProjectCommand extends Command {
         path: "app/controllers/controller.ts",
         content: createControllerContent(),
       },
+      {
+        path: "app/controllers/UserController.ts",
+        content: createUserController(),
+      },
+      {
+        path: "app/models/User.ts",
+        content: createUserModel(),
+      },
+      {
+        path: "database/migrations/000000000000_create_user_table.ts",
+        content: createUserMigration(),
+      },
     ];
 
     await Promise.all(
@@ -148,32 +163,5 @@ export default class CreateProjectCommand extends Command {
       )
     );
     console.log("📝 Files created successfully!\n");
-  }
-
-  private async installDependencies(basePath: string, db: string) {
-    await installPackages(basePath, ["typescript", "@types/bun"], true);
-    await installPackages(basePath, ["@bunvel/framework"]);
-
-    if (db == "mysql") {
-      await installPackages(basePath, ["mysql2"]);
-    }
-
-    if (db == "postgresql") {
-      await installPackages(basePath, ["pg"]);
-    }
-  }
-
-  private async initializeGitRepository(basePath: string) {
-    return new Promise<void>((resolve, reject) => {
-      exec(`git init ${basePath}`, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`❌ Failed to initialize git repository: ${stderr}`);
-          reject(error);
-        } else {
-          console.log(stdout);
-          resolve();
-        }
-      });
-    });
   }
 }

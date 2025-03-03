@@ -14,7 +14,7 @@ export function createPackageJson(name: string) {
       engines: {
         bun: ">=1.2.0",
       },
-      packageManager: "bun@latest",
+      packageManager: "bun@1.2.0",
     },
     null,
     2

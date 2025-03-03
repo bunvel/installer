@@ -1,6 +1,5 @@
 import { exec } from "child_process";
 import fs from "fs";
-import https from "https";
 import path from "path";
 import { promisify } from "util";
 import { Command } from "../Command";
@@ -8,39 +7,20 @@ const os = require("os");
 
 const execPromise = promisify(exec);
 
-export default class UpgradeCommand extends Command {
-  signature = "upgrade";
-  description = "Upgrade Bunvel to the latest version";
+export class VersionCommand extends Command {
+  signature = "version";
+  description = "Display the current Bunvel version";
 
   async handle(): Promise<void> {
     try {
       await this.checkBunInstalled();
 
-      console.log("🚀 Checking for updates to @bunvel/installer...");
-
       const currentVersion = await this.getInstalledVersion(
         "@bunvel/installer"
       );
-      const latestVersion = await this.getLatestVersionFromNpm(
-        "@bunvel/installer"
-      );
-
-      if (currentVersion === latestVersion) {
-        console.log(
-          `✅ You already have the latest version: ${currentVersion}`
-        );
-        process.exit(0);
-      }
-
-      console.log(
-        `⬆️  Upgrading from ${currentVersion} to ${latestVersion}...`
-      );
-      await this.runCommand("bun install -g @bunvel/installer@latest");
-      console.log(
-        `✅ Successfully upgraded to @bunvel/installer v${latestVersion}`
-      );
+      console.log(`Bunvel version: ${currentVersion}`);
     } catch (error) {
-      console.error("❌ Error during upgrade:", error);
+      console.error("❌ Error checking version:", error);
       process.exit(1);
     }
   }
@@ -111,47 +91,6 @@ export default class UpgradeCommand extends Command {
       return "not installed";
     } catch (error) {
       throw new Error(`Failed to fetch installed version of ${pkg}: ${error}`);
-    }
-  }
-
-  private async getLatestVersionFromNpm(pkg: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      https
-        .get(`https://registry.npmjs.org/${pkg}`, (res) => {
-          let data = "";
-
-          res.on("data", (chunk) => {
-            data += chunk;
-          });
-
-          res.on("end", () => {
-            try {
-              const packageInfo = JSON.parse(data);
-              resolve(packageInfo["dist-tags"].latest);
-            } catch (error) {
-              reject(
-                new Error(`Failed to parse npm registry response for ${pkg}`)
-              );
-            }
-          });
-        })
-        .on("error", (error) => {
-          reject(
-            new Error(
-              `Failed to fetch latest version from npm for ${pkg}: ${error.message}`
-            )
-          );
-        });
-    });
-  }
-
-  private async runCommand(command: string): Promise<void> {
-    try {
-      const { stdout, stderr } = await execPromise(command);
-      if (stdout) console.log(stdout);
-      if (stderr) console.error(stderr);
-    } catch (error) {
-      throw new Error(`Command failed: ${command}`);
     }
   }
 }
