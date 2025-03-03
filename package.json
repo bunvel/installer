@@ -8,6 +8,10 @@
     "Bunvel Installer"
   ],
   "author": "Aniket Khote",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bunvel/installer.git"
+  },
   "license": "MIT",
   "bin": {
     "bunvel": "dist/index.js"
