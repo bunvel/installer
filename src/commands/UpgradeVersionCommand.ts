@@ -1,10 +1,10 @@
 import { exec } from "child_process";
 import fs from "fs";
 import https from "https";
+import os from "os";
 import path from "path";
 import { promisify } from "util";
 import { Command } from "../Command";
-const os = require("os");
 
 const execPromise = promisify(exec);
 

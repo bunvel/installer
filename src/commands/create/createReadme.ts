@@ -37,6 +37,14 @@ Run your Bunvel application with:
 bun run dev
 \`\`\`
 
+### 🗂 Available Commands
+
+To see all available commands, run:
+
+\`\`\`bash
+bun vel
+\`\`\`
+
 ### 🔧 Generating Components
 
 Bunvel's CLI makes it easy to generate controllers, models, and migrations.
@@ -46,13 +54,13 @@ Bunvel's CLI makes it easy to generate controllers, models, and migrations.
 Generate a new controller:
 
 \`\`\`bash
-Bunvel make:controller User
+bun vel make:controller User
 \`\`\`
 
 For a resource controller, use:
 
 \`\`\`bash
-Bunvel make:controller User -r
+bun vel make:controller User -r
 \`\`\`
 
 #### 🗄 Creating a Migration
@@ -60,7 +68,7 @@ Bunvel make:controller User -r
 Create a new migration:
 
 \`\`\`bash
-Bunvel make:migration users
+bun vel make:migration users
 \`\`\`
 
 #### 🧩 Creating a Model
@@ -68,13 +76,13 @@ Bunvel make:migration users
 Generate a new model with optional components:
 
 \`\`\`bash
-Bunvel make:model User
+bun vel make:model User
 \`\`\`
 
 To also generate a migration, controller, and resource controller:
 
 \`\`\`bash
-Bunvel make:model User -mcr
+bun vel make:model User -mcr
 \`\`\`
 
 - \`-m\`: Generate a migration
@@ -84,11 +92,11 @@ Bunvel make:model User -mcr
 ### 🗄 Database Operations
 
 \`\`\`bash
-Bunvel migrate:run   # Run all migrations
+bun vel migrate:run   # Run all migrations
 
-Bunvel migrate:fresh  # Drop all tables and re-run all migrations
+bun vel migrate:fresh  # Drop all tables and re-run all migrations
 
-Bunvel migrate:rollback  # Rollback the last batch of migrations
+bun vel migrate:rollback  # Rollback the last batch of migrations
 \`\`\`
 
 ## 📚 Documentation

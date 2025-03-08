@@ -1,7 +1,7 @@
 import { cancel, intro, isCancel, outro, select, text } from "@clack/prompts";
-import { mkdir, writeFile } from "fs/promises";
+import { mkdir } from "node:fs/promises";
 import { Command } from "../Command";
-import { installDependencies } from "../utils/install-deps";
+import { installDependencies } from "../utils/install";
 import { initializeGitRepository } from "../utils/intialize-git";
 import { createAppConfig } from "./create/createAppConfig";
 import { createCli } from "./create/createCli";
@@ -159,7 +159,7 @@ export default class CreateProjectCommand extends Command {
 
     await Promise.all(
       files.map((file) =>
-        writeFile(`${basePath}/${file.path}`, file.content.trim())
+        Bun.write(`${basePath}/${file.path}`, file.content.trim())
       )
     );
     console.log("📝 Files created successfully!\n");
