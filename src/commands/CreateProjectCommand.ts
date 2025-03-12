@@ -1,7 +1,5 @@
 import { cancel, intro, isCancel, outro, select, text } from "@clack/prompts";
-import { exec } from "child_process";
 import { mkdir } from "node:fs/promises";
-import { promisify } from "util";
 import { Command } from "../Command";
 import { installDependencies } from "../utils/install";
 import { initializeGitRepository } from "../utils/intialize-git";
@@ -21,8 +19,6 @@ import createUserController from "./create/createUserController";
 import createUserMigration from "./create/createUserMigration";
 import createUserModel from "./create/createUserModel";
 import { createTsconfig } from "./create/tsconfig";
-
-const execPromise = promisify(exec);
 
 export default class CreateProjectCommand extends Command {
   signature = "create [name]"; // Make 'name' optional
@@ -76,15 +72,8 @@ export default class CreateProjectCommand extends Command {
     console.log("📦 Installing dependencies...");
     await installDependencies(`${parentDir}/${projectDir}`, db);
 
-    const { stdout } = await execPromise("git --version");
-    if (!stdout.includes("git version")) {
-      console.warn(
-        "Git is not installed on your system. You can manually initialize a git repository by running 'git init' in your project directory."
-      );
-    } else {
-      console.log("🔧 Initializing git repository...\n");
-      await initializeGitRepository(`${parentDir}/${projectDir}`);
-    }
+    console.log("🔧 Initializing git repository...\n");
+    await initializeGitRepository(`${parentDir}/${projectDir}`);
 
     // Enhanced outro message
     outro(`🎉 Project '${projectDir}' created successfully! 🚀

@@ -35,13 +35,13 @@ export default class UpgradeCommand extends Command {
       }
 
       console.log(
-        `⬆️  Upgrading from ${chalk.blueBright(
-          currentVersion
-        )} to ${chalk.greenBright(latestVersion)}...`
+        `⬆️  Upgrading from ${chalk.green(currentVersion)} to ${chalk.green(
+          latestVersion
+        )}...`
       );
       await this.runCommand("bun install -g @bunvel/installer@latest");
       console.log(
-        `✅ Successfully upgraded to @bunvel/installer v${chalk.greenBright(
+        `✅ Successfully upgraded to @bunvel/installer v${chalk.green(
           latestVersion
         )}`
       );

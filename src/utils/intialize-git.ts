@@ -1,11 +1,13 @@
 import { exec } from "child_process";
 
 export function initializeGitRepository(basePath: string) {
-  return new Promise<void>((resolve, reject) => {
-    exec(`git init ${basePath}`, (error, stdout, stderr) => {
+  return new Promise<void>((resolve) => {
+    exec(`git init ${basePath}`, (error, stdout) => {
       if (error) {
-        console.error(`❌ Failed to initialize git repository: ${stderr}\n`);
-        reject(error);
+        console.warn(
+          "Git is not installed on your system. You can manually initialize a git repository by running 'git init' in your project directory."
+        );
+        resolve();
       } else {
         console.log(`${stdout}\n`);
         resolve();
