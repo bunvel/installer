@@ -1,6 +1,6 @@
+import chalk from "chalk";
 import { exec } from "child_process";
 import fs from "fs";
-import https from "https";
 import os from "os";
 import path from "path";
 import { promisify } from "util";
@@ -27,17 +27,23 @@ export default class UpgradeCommand extends Command {
 
       if (currentVersion === latestVersion) {
         console.log(
-          `✅ You already have the latest version: ${currentVersion}`
+          `✅ You already have the latest version: ${chalk.green(
+            currentVersion
+          )}`
         );
         process.exit(0);
       }
 
       console.log(
-        `⬆️  Upgrading from ${currentVersion} to ${latestVersion}...`
+        `⬆️  Upgrading from ${chalk.blueBright(
+          currentVersion
+        )} to ${chalk.greenBright(latestVersion)}...`
       );
       await this.runCommand("bun install -g @bunvel/installer@latest");
       console.log(
-        `✅ Successfully upgraded to @bunvel/installer v${latestVersion}`
+        `✅ Successfully upgraded to @bunvel/installer v${chalk.greenBright(
+          latestVersion
+        )}`
       );
     } catch (error) {
       console.error("❌ Error during upgrade:", error);
@@ -116,31 +122,15 @@ export default class UpgradeCommand extends Command {
 
   private async getLatestVersionFromNpm(pkg: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      https
-        .get(`https://registry.npmjs.org/${pkg}`, (res) => {
-          let data = "";
-
-          res.on("data", (chunk) => {
-            data += chunk;
-          });
-
-          res.on("end", () => {
-            try {
-              const packageInfo = JSON.parse(data);
-              resolve(packageInfo["dist-tags"].latest);
-            } catch (error) {
-              reject(
-                new Error(`Failed to parse npm registry response for ${pkg}`)
-              );
-            }
-          });
+      fetch(`https://registry.npmjs.org/${pkg}`)
+        .then((res) => {
+          return res.json();
         })
-        .on("error", (error) => {
-          reject(
-            new Error(
-              `Failed to fetch latest version from npm for ${pkg}: ${error.message}`
-            )
-          );
+        .then((data) => {
+          resolve(data["dist-tags"].latest);
+        })
+        .catch((error) => {
+          reject(error);
         });
     });
   }

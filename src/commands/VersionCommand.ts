@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { exec } from "child_process";
 import fs from "fs";
 import os from "os";
@@ -18,7 +19,7 @@ export class VersionCommand extends Command {
       const currentVersion = await this.getInstalledVersion(
         "@bunvel/installer"
       );
-      console.log(`Bunvel version: ${currentVersion}`);
+      console.log(`Bunvel version: ${chalk.green(currentVersion)}`);
     } catch (error) {
       console.error("❌ Error checking version:", error);
       process.exit(1);
