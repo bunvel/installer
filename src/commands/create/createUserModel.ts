@@ -1,4 +1,4 @@
-export default function createUserModel() {
+export function createUserModel() {
   return `
 import { Model } from "@bunvel/framework";
 

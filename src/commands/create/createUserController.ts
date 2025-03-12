@@ -1,4 +1,4 @@
-export default function createUserController() {
+export function createUserController() {
   return `
 import type { Context } from "@bunvel/framework";
 import Controller from "./controller";

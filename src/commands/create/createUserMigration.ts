@@ -1,4 +1,4 @@
-export default function createUserMigration() {
+export function createUserMigration() {
   return `
 import type { Blueprint } from "@bunvel/framework";
 import { Migration } from "@bunvel/framework";

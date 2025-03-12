@@ -15,9 +15,9 @@ import { createLogConfig } from "./create/createLoggingConfig";
 import { createPackageJson } from "./create/createPackageJson";
 import { createReadme } from "./create/createReadme";
 import { createRoutesApiContent } from "./create/createRoutesApiContent";
-import createUserController from "./create/createUserController";
-import createUserMigration from "./create/createUserMigration";
-import createUserModel from "./create/createUserModel";
+import { createUserController } from "./create/createUserController";
+import { createUserMigration } from "./create/createUserMigration";
+import { createUserModel } from "./create/createUserModel";
 import { createTsconfig } from "./create/tsconfig";
 
 export default class CreateProjectCommand extends Command {
