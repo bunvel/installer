@@ -1,4 +1,5 @@
 import { cancel, intro, isCancel, outro, select, text } from "@clack/prompts";
+import chalk from "chalk";
 import { mkdir } from "node:fs/promises";
 import { Command } from "../Command";
 import { installDependencies } from "../utils/install";
@@ -11,7 +12,6 @@ import { createEnv, createExampleEnv } from "./create/createEnv";
 import { createExampleTest } from "./create/createExampleTest";
 import { createGitIgnore } from "./create/createGitignore";
 import { createIndexContent } from "./create/createIndexContent";
-import { createLogConfig } from "./create/createLoggingConfig";
 import { createPackageJson } from "./create/createPackageJson";
 import { createReadme } from "./create/createReadme";
 import { createRoutesApiContent } from "./create/createRoutesApiContent";
@@ -76,14 +76,18 @@ export default class CreateProjectCommand extends Command {
     await initializeGitRepository(`${parentDir}/${projectDir}`);
 
     // Enhanced outro message
-    outro(`🎉 Project '${projectDir}' created successfully! 🚀
+    outro(`🎉 Project '${chalk.green(projectDir)}' created successfully! 🚀
 
       You're all set to dive into development. Here are the next steps:
       1. Navigate to your project directory: cd ${parentDir}/${projectDir}
       2. Start the development server: bun run dev
-      3. Access your API at: [http://localhost:8000/api]
+      3. Access your API at: [${chalk.green(`http://localhost:8000/api`)}]
       
-      🚀 Happy coding! May your code be bug-free and your coffee be strong! ☕\n\n`);
+      ${chalk.green(
+        "🚀 Happy coding!"
+      )} May your code be bug-free and your ${chalk.yellow(
+      "coffee"
+    )} be strong! ${chalk.cyan("☕\n\n")}`);
   }
 
   private isValidProjectName(name: string): boolean {
@@ -137,7 +141,7 @@ export default class CreateProjectCommand extends Command {
       { path: "test/example.test.ts", content: createExampleTest() },
       { path: "config/app.ts", content: createAppConfig() },
       { path: "config/database.ts", content: createDatabaseConfig() },
-      { path: "config/logging.ts", content: createLogConfig() },
+      // { path: "config/logging.ts", content: createLogConfig() },
       { path: "routes/api.ts", content: createRoutesApiContent() },
       {
         path: "app/controllers/controller.ts",
