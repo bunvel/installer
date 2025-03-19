@@ -1,13 +1,11 @@
 import { execSync } from "child_process";
+import { DB_PACKAGES, FRAMEWORK_NAME } from "./constant";
 
 export async function installDependencies(basePath: string, db: string) {
   const commonPackages = ["typescript", "@types/bun"];
-  const dbPackages: Record<string, string> = {
-    mysql: "mysql2",
-    postgresql: "pg",
-  };
+  const dbPackages: Record<string, string> = DB_PACKAGES;
 
-  const packages = ["@bunvel/framework"];
+  const packages = [FRAMEWORK_NAME];
 
   if (db in dbPackages) {
     packages.push(dbPackages[db]);
@@ -32,7 +30,7 @@ export async function installPackages(
       `Installing ${dev ? "dev" : "default"} packages: ${packageList}`
     );
     execSync(command, { cwd: projectPath, stdio: "inherit" });
-    console.log(`Successfully installed: ${packageList}`);
+    console.log(`Successfully installed: ${packageList}\n`);
   } catch (error) {
     console.error(`Error installing packages: ${packageList}\n`, error);
   }

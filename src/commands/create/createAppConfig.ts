@@ -6,11 +6,11 @@ export default {
   /**
    * The name of the application.
    * This is fetched from the environment variable 'APP_NAME'.
-   * If 'APP_NAME' is not set, it defaults to 'Ather'.
+   * If 'APP_NAME' is not set, it defaults to 'Bunvel'.
    * 
    * @var {string}
    */
-  name: Env.get("APP_NAME", "Ather"),
+  name: Env.get("APP_NAME", "Bunvel"),
 
   /**
    * The port on which the application will run.

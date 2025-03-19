@@ -1,10 +1,10 @@
 import chalk from "chalk";
 import { exec } from "child_process";
-import fs from "fs";
 import os from "os";
 import path from "path";
 import { promisify } from "util";
 import { Command } from "../Command";
+import { PACKAGE_NAME } from "../utils/constant";
 
 const execPromise = promisify(exec);
 
@@ -16,9 +16,7 @@ export class VersionCommand extends Command {
     try {
       await this.checkBunInstalled();
 
-      const currentVersion = await this.getInstalledVersion(
-        "@bunvel/installer"
-      );
+      const currentVersion = await this.getInstalledVersion(PACKAGE_NAME);
       console.log(`Bunvel version: ${chalk.green(currentVersion)}`);
     } catch (error) {
       console.error("❌ Error checking version:", error);
@@ -68,10 +66,8 @@ export class VersionCommand extends Command {
       ];
 
       for (const packageJsonPath of possiblePaths) {
-        if (fs.existsSync(packageJsonPath)) {
-          const packageJson = JSON.parse(
-            fs.readFileSync(packageJsonPath, "utf8")
-          );
+        if (await Bun.file(packageJsonPath).exists()) {
+          const packageJson = await Bun.file(packageJsonPath).json();
           return packageJson.version || "unknown";
         }
       }

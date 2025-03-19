@@ -1,10 +1,10 @@
 import chalk from "chalk";
 import { exec } from "child_process";
-import fs from "fs";
 import os from "os";
 import path from "path";
 import { promisify } from "util";
 import { Command } from "../Command";
+import { PACKAGE_NAME } from "../utils/constant";
 
 const execPromise = promisify(exec);
 
@@ -16,14 +16,10 @@ export default class UpgradeCommand extends Command {
     try {
       await this.checkBunInstalled();
 
-      console.log("🚀 Checking for updates to @bunvel/installer...");
+      console.log(`🚀 Checking for updates to ${PACKAGE_NAME}...`);
 
-      const currentVersion = await this.getInstalledVersion(
-        "@bunvel/installer"
-      );
-      const latestVersion = await this.getLatestVersionFromNpm(
-        "@bunvel/installer"
-      );
+      const currentVersion = await this.getInstalledVersion(PACKAGE_NAME);
+      const latestVersion = await this.getLatestVersionFromNpm(PACKAGE_NAME);
 
       if (currentVersion === latestVersion) {
         console.log(
@@ -39,9 +35,9 @@ export default class UpgradeCommand extends Command {
           latestVersion
         )}...`
       );
-      await this.runCommand("bun install -g @bunvel/installer@latest");
+      await this.runCommand(`bun install -g ${PACKAGE_NAME}@latest`);
       console.log(
-        `✅ Successfully upgraded to @bunvel/installer v${chalk.green(
+        `✅ Successfully upgraded to ${PACKAGE_NAME} v${chalk.green(
           latestVersion
         )}`
       );
@@ -93,10 +89,8 @@ export default class UpgradeCommand extends Command {
       ];
 
       for (const packageJsonPath of possiblePaths) {
-        if (fs.existsSync(packageJsonPath)) {
-          const packageJson = JSON.parse(
-            fs.readFileSync(packageJsonPath, "utf8")
-          );
+        if (await Bun.file(packageJsonPath).exists()) {
+          const packageJson = await Bun.file(packageJsonPath).json();
           return packageJson.version || "unknown";
         }
       }

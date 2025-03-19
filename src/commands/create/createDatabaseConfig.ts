@@ -38,11 +38,11 @@ export default {
       /**
        * The name of the database to connect to.
        * This is fetched from the environment variable 'DB_DATABASE'.
-       * If 'DB_DATABASE' is not set, it defaults to 'ather'.
+       * If 'DB_DATABASE' is not set, it defaults to 'bunvel'.
        * 
        * @var {string}
        */
-      database: Env.get("DB_DATABASE", "ather"),
+      database: Env.get("DB_DATABASE", "bunvel"),
 
       /**
        * The username used to connect to the MySQL database.
@@ -88,11 +88,11 @@ export default {
       /**
        * The name of the database to connect to.
        * This is fetched from the environment variable 'DB_DATABASE'.
-       * If 'DB_DATABASE' is not set, it defaults to 'ather'.
+       * If 'DB_DATABASE' is not set, it defaults to 'bunvel'.
        * 
        * @var {string}
        */
-      database: Env.get("DB_DATABASE", "ather"),
+      database: Env.get("DB_DATABASE", "bunvel"),
 
       /**
        * The username used to connect to the PostgreSQL database.
@@ -120,11 +120,11 @@ export default {
       /**
        * The file path where the SQLite database is stored.
        * This is fetched from the environment variable 'DB_DATABASE'.
-       * If 'DB_DATABASE' is not set, it defaults to 'ather.sqlite'.
+       * If 'DB_DATABASE' is not set, it defaults to 'bunvel'.
        * 
        * @var {string}
        */
-      database: Env.get("DB_DATABASE", "ather.sqlite"),
+      database: Env.get("DB_DATABASE", "bunvel"),
 
       /**
        * The mode in which the SQLite database is opened.
