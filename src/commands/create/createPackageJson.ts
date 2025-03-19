@@ -8,7 +8,7 @@ export function createPackageJson(name: string) {
       type: "module",
       scripts: {
         start: "bun run index.ts",
-        dev: "bun run --watch index.ts",
+        dev: "bun run --watch ./bootstrap/index.ts",
         vel: "bun run ./vel.ts",
       },
       engines: {
