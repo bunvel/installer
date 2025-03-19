@@ -140,7 +140,7 @@ export default class CreateProjectCommand extends Command {
       { path: ".env", content: createEnv(projectDir, db) },
       { path: "vel.ts", content: createCli() },
       { path: ".env.example", content: createExampleEnv() },
-      { path: "test/example.test.ts", content: createExampleTest() },
+      { path: "test/example.test.ts", content: createExampleTest(projectDir) },
       { path: "config/app.ts", content: createAppConfig() },
       { path: "config/database.ts", content: createDatabaseConfig() },
       // { path: "config/logging.ts", content: createLogConfig() },

@@ -125,15 +125,6 @@ export default {
        * @var {string}
        */
       database: Env.get("DB_DATABASE", "bunvel"),
-
-      /**
-       * The mode in which the SQLite database is opened.
-       * This is fetched from the environment variable 'DB_MODE'.
-       * If 'DB_MODE' is not set, it defaults to 'readwrite'.
-       * 
-       * @var {string}
-       */
-      mode: Env.get("DB_MODE", "readwrite"),
     },
   },
 };

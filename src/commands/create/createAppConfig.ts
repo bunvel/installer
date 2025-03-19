@@ -31,15 +31,6 @@ export default {
   env: Env.get("APP_ENV", "local"),
 
   /**
-   * The debug mode for the application.
-   * This is fetched from the environment variable 'APP_DEBUG'.
-   * If 'APP_DEBUG' is not set, it defaults to 'false'.
-   * 
-   * @var {boolean}
-   */
-  debug: Env.get("APP_DEBUG", false),
-
-  /**
    * The URL of the application.
    * This is fetched from the environment variable 'APP_URL'.
    * If 'APP_URL' is not set, it defaults to 'http://localhost'.
