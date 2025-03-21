@@ -1,20 +1,21 @@
 export function createRoutesApiContent() {
   return `
-import { Router, RouterService } from "@bunvel/framework";
+import type { RouterService } from "@bunvel/framework";
 import UserController from "@controller/UserController";
 
 /**
  * Define API routes for the application.
  *
  */
-export default (appRouter: Router) => {
-  const router = new RouterService(appRouter);
+export default function (Route: RouterService) {
+  // API root route
+  Route.get("/", async () => "Welcome to the Bunvel");
 
-  router.get("/", async () => "Welcome to Bunvel");
+  // Simple API route
+  Route.get("/api", async () => "Hello, API!");
 
-  router.get("/api", async () => "Hello, API!");
-
-  router.apiResource("/api/users", UserController);
-};
+  // API resource (RESTful)
+  Route.apiResource("/api/users", UserController);
+}
   `;
 }

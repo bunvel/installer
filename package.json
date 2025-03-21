@@ -1,6 +1,6 @@
 {
   "name": "@bunvel/installer",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "type": "module",
   "description": "Cli tool to create a bunvel project",
   "keywords": [
@@ -17,10 +17,11 @@
   "bin": {
     "bunvel": "dist/index.js"
   },
-  "main": "dist/index.mjs",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsup index.ts --format esm --dts"
+    "build": "tsup index.ts --format esm --dts",
+    "start": "bun run dist/index.js"
   },
   "files": [
     "dist"
@@ -28,7 +29,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.js"
     }
   },
   "devDependencies": {
